@@ -1,8 +1,6 @@
 package Rest.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class UserModel {
@@ -14,11 +12,9 @@ public class UserModel {
     private String password;
     private String accountType;
 
-//    public UserModel(String login, String password, String accountType) {
-//        this.login = login;
-//        this.password = password;
-//        this.accountType = accountType;
-//    }
+    @OneToOne
+    @JoinColumn(name = "accountId")
+    private AccountModel accountModel;
 
     public Long getId() {
         return id;
@@ -52,6 +48,14 @@ public class UserModel {
         this.accountType = accountType;
     }
 
+    public AccountModel getAccountModel() {
+        return accountModel;
+    }
+
+    public void setAccountModel(AccountModel accountModel) {
+        this.accountModel = accountModel;
+    }
+
     @Override
     public String toString() {
         return "UserModel{" +
@@ -59,6 +63,7 @@ public class UserModel {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", accountType='" + accountType + '\'' +
+                ", accountModel=" + accountModel +
                 '}';
     }
 }
