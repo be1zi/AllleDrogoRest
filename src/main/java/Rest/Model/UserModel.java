@@ -55,15 +55,4 @@ public class UserModel {
     public void setAccountModel(AccountModel accountModel) {
         this.accountModel = accountModel;
     }
-
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", accountType='" + accountType + '\'' +
-                ", accountModel=" + accountModel +
-                '}';
-    }
 }

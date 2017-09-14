@@ -3,6 +3,8 @@ package Rest.Model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class AccountModel {
@@ -20,6 +22,22 @@ public class AccountModel {
     private int houseNumber;
     private int placeNumber;
     private String voivodeship;
+    private Double mark;
+
+    @OneToMany
+    private List<AuctionModel> watchUserList;
+
+    @OneToMany
+    private List<CommentModel> commentList;
+
+    @OneToMany
+    private List<AuctionModel> activeAuctionList;
+
+    @OneToMany
+    private List<AuctionModel> userAuctionList;
+
+    @OneToMany
+    private List<TransactionModel> transactionList;
 
     public Long getId() {
         return id;
@@ -107,5 +125,53 @@ public class AccountModel {
 
     public void setVoivodeship(String voivodeship) {
         this.voivodeship = voivodeship;
+    }
+
+    public Double getMark() {
+        return mark;
+    }
+
+    public void setMark(Double mark) {
+        this.mark = mark;
+    }
+
+    public List<AuctionModel> getWatchUserList() {
+        return watchUserList;
+    }
+
+    public void setWatchUserList(List<AuctionModel> watchUserList) {
+        this.watchUserList = watchUserList;
+    }
+
+    public List<CommentModel> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<CommentModel> commentList) {
+        this.commentList = commentList;
+    }
+
+    public List<AuctionModel> getActiveAuctionList() {
+        return activeAuctionList;
+    }
+
+    public void setActiveAuctionList(List<AuctionModel> activeAuctionList) {
+        this.activeAuctionList = activeAuctionList;
+    }
+
+    public List<AuctionModel> getUserAuctionList() {
+        return userAuctionList;
+    }
+
+    public void setUserAuctionList(List<AuctionModel> userAuctionList) {
+        this.userAuctionList = userAuctionList;
+    }
+
+    public List<TransactionModel> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<TransactionModel> transactionList) {
+        this.transactionList = transactionList;
     }
 }
