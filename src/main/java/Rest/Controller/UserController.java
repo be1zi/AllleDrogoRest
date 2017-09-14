@@ -24,23 +24,34 @@ public class UserController {
         this.accountRepository = accountRepository;
     }
 
-    @RequestMapping("/getuser")
-    public List<UserModel> getUser(){
+    @RequestMapping("/getalluser")
+    public List<UserModel> getUserList(){
 
         List<UserModel> list = (List<UserModel>)userRepository.findAll();
-
         return list;
+    }
+
+    @RequestMapping("/getuser")
+    public UserModel getUser(@RequestParam(value = "login", defaultValue = "") String login, @RequestParam(value = "password", defaultValue = "") String password){
+
+        UserModel uM = userRepository.findByLogin(login);
+        return uM;
     }
 
     @RequestMapping("/adduser")
     public UserModel addUser(@RequestParam(value = "login", defaultValue = "") String login, @RequestParam(value = "password", defaultValue = "") String password){
 
-        UserModel userModel = new UserModel();
+        UserModel uM = userRepository.findByLogin(login);
 
+        if (uM != null){
+            return null;
+        }
+
+        UserModel userModel = new UserModel();
         userModel.setLogin(login);
         userModel.setPassword(password);
         userModel.setAccountType("Admin");
-
+        
         userRepository.save(userModel);
 
         return userModel;
