@@ -2,7 +2,6 @@ package Rest.Controller;
 
 import Rest.DAO.AccountRepository;
 import Rest.DAO.UserRepository;
-import Rest.Model.AccountModel;
 import Rest.Model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,9 +50,10 @@ public class UserController {
         userModel.setLogin(login);
         userModel.setPassword(password);
         userModel.setAccountType("Admin");
-        
+
         userRepository.save(userModel);
 
         return userModel;
     }
+
 }
