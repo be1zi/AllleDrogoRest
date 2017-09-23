@@ -3,6 +3,7 @@ package Rest.Controller;
 import Rest.DAO.TestDao;
 import Rest.Model.TestModel;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,5 +48,14 @@ public class testController {
         testModel.setName(result.map(TestModel::getName).orElse(""));
 
         return new ResponseEntity<>(testModel, new HttpHeaders(), OK);
+    }
+
+    @RequestMapping(value = "/addtest",method = RequestMethod.POST)
+    public ResponseEntity<String> createUser(@RequestBody TestModel testModel){
+        TestModel t1 = new TestModel();
+        t1.setName(testModel.getName());
+        testDao.save(t1);
+
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 }
