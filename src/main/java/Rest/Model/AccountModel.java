@@ -23,6 +23,8 @@ public class AccountModel {
     private int placeNumber;
     private String voivodeship;
     private Double mark;
+    private String phone;
+    private String description;
 
     @OneToMany
     private List<AuctionModel> watchUserList;
@@ -133,6 +135,14 @@ public class AccountModel {
 
     public void setMark(Double mark) {
         this.mark = mark;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public List<AuctionModel> getWatchUserList() {

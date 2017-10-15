@@ -2,13 +2,15 @@ package Rest.Controller;
 
 import Rest.DAO.AccountRepository;
 import Rest.DAO.UserRepository;
+import Rest.Model.AccountModel;
 import Rest.Model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static java.lang.System.out;
 
 @RestController
 @RequestMapping("/user")
@@ -30,6 +32,24 @@ public class UserController {
         UserModel uM = userRepository.findByLoginAndPassword(userModel.getLogin(), userModel.getPassword());
         return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/adduser", method = RequestMethod.POST)
+    public ResponseEntity<UserModel> addUser(@RequestBody UserModel userModel){
+
+        UserModel uM = userRepository.findByLogin(userModel.getLogin());
+
+        if (uM != null){
+            UserModel userModel1 = new UserModel();
+            return new ResponseEntity<>(userModel1, new HttpHeaders(), HttpStatus.OK);
+        }
+
+        accountRepository.save(userModel.getAccountModel());
+        userRepository.save(userModel);
+        uM = userRepository.findByLogin(userModel.getLogin());
+        
+        return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
+    }
+
 //
 //    @RequestMapping("/getalluser")
 //    public List<UserModel> getUserList(){
@@ -45,23 +65,6 @@ public class UserController {
 //        return uM;
 //    }
 //
-//    @RequestMapping("/adduser")
-//    public UserModel addUser(@RequestParam(value = "login", defaultValue = "") String login, @RequestParam(value = "password", defaultValue = "") String password){
-//
-//        UserModel uM = userRepository.findByLogin(login);
-//
-//        if (uM != null){
-//            return null;
-//        }
-//
-//        UserModel userModel = new UserModel();
-//        userModel.setLogin(login);
-//        userModel.setPassword(password);
-//        userModel.setAccountType("Admin");
-//
-//        userRepository.save(userModel);
-//
-//        return userModel;
-//    }
+
 
 }
