@@ -30,11 +30,8 @@ public class UserController {
     public ResponseEntity<UserModel> getUser(@RequestBody UserModel userModel) {
 
         UserModel uM = userRepository.findByLoginAndPassword(userModel.getLogin(), userModel.getPassword());
-        out.println(uM);
-
         if (uM == null) {
             uM = userRepository.findByLogin(userModel.getLogin());
-            out.println(uM);
 
             if(uM == null) {
                 return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.valueOf(301));
@@ -53,11 +50,12 @@ public class UserController {
 
         if (uM != null){
             UserModel userModel1 = new UserModel();
-            return new ResponseEntity<>(userModel1, new HttpHeaders(), HttpStatus.OK);
+            return new ResponseEntity<>(userModel1, new HttpHeaders(), HttpStatus.FOUND);
         }
 
         accountRepository.save(userModel.getAccountModel());
         userRepository.save(userModel);
+
         uM = userRepository.findByLogin(userModel.getLogin());
 
         return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
