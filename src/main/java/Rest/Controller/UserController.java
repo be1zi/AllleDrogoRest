@@ -27,10 +27,23 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getuser", method = RequestMethod.POST)
-    public ResponseEntity<UserModel> getUser(@RequestBody UserModel userModel){
+    public ResponseEntity<UserModel> getUser(@RequestBody UserModel userModel) {
 
         UserModel uM = userRepository.findByLoginAndPassword(userModel.getLogin(), userModel.getPassword());
-        return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
+        out.println(uM);
+
+        if (uM == null) {
+            uM = userRepository.findByLogin(userModel.getLogin());
+            out.println(uM);
+
+            if(uM == null) {
+                return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.valueOf(301));
+            }else{
+                return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "/adduser", method = RequestMethod.POST)
@@ -46,7 +59,7 @@ public class UserController {
         accountRepository.save(userModel.getAccountModel());
         userRepository.save(userModel);
         uM = userRepository.findByLogin(userModel.getLogin());
-        
+
         return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
     }
 
