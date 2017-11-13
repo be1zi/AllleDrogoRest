@@ -29,13 +29,16 @@ public class MyAccountController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public ResponseEntity<UserModel> getUser(@RequestBody UserModel userModel) {
 
-        //out.println("userModel: " + userModel.toString());
+        UserModel userPassword = userRepository.findByIdAndLogin(userModel.getId(), userModel.getLogin());
+        if(userPassword != null){
+            userPassword.setPassword(userModel.getPassword());
+            userRepository.save(userPassword);
+
+            return new ResponseEntity<>(userPassword, new HttpHeaders(), HttpStatus.OK);
+        }
+
         UserModel userModel1 = userRepository.findByLogin(userModel.getLogin());
         Optional<UserModel> uM = userRepository.findById(userModel.getId());
-
-        //out.println("userModel1: " +userModel1.toString());
-        //out.println("uM: " +uM.get().toString());
-
 
         if(userModel1 == null){
             userRepository.save(userModel);
