@@ -2,6 +2,7 @@ package Rest.Controller;
 
 import Rest.DAO.AccountRepository;
 import Rest.DAO.UserRepository;
+import Rest.Model.AccountModel;
 import Rest.Model.UserModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class MyAccountController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public ResponseEntity<UserModel> getUser(@RequestBody UserModel userModel) {
+    public ResponseEntity<UserModel> saveUser(@RequestBody UserModel userModel) {
 
         UserModel userPassword = userRepository.findByIdAndLogin(userModel.getId(), userModel.getLogin());
         if(userPassword != null){
@@ -49,4 +50,18 @@ public class MyAccountController {
         return new ResponseEntity<>(uM.get(), new HttpHeaders(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/editaccount",method = RequestMethod.POST)
+    public ResponseEntity<UserModel> saveAccount(@RequestBody UserModel userModel){
+
+        UserModel uM = userRepository.findByLoginAndPassword(userModel.getLogin(), userModel.getPassword());
+        AccountModel accountModel = accountRepository.findByEmail(userModel.getAccountModel().getEmail());
+
+        if(uM != null && accountModel == null){
+            accountRepository.save(userModel.getAccountModel());
+            return new ResponseEntity<>(userModel, new HttpHeaders(), HttpStatus.OK);
+
+        }else{
+            return new ResponseEntity<>(userModel, new HttpHeaders(), HttpStatus.valueOf(301));
+        }
+    }
 }

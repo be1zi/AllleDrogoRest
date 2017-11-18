@@ -61,21 +61,5 @@ public class UserController {
         return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
     }
 
-//
-//    @RequestMapping("/getalluser")
-//    public List<UserModel> getUserList(){
-//
-//        List<UserModel> list = (List<UserModel>)userRepository.findAll();
-//        return list;
-//    }
-//
-//    @RequestMapping("/getuser")
-//    public UserModel getUser(@RequestParam(value = "login", defaultValue = "") String login, @RequestParam(value = "password", defaultValue = "") String password){
-//
-//        UserModel uM = userRepository.findByLogin(login);
-//        return uM;
-//    }
-//
-
 
 }
