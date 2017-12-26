@@ -54,8 +54,7 @@ public class AuctionController {
         auctionModel.setUsersList(result.map(AuctionModel::getUsersList).orElse(null));
         auctionModel.setSold(result.map(AuctionModel::isSold).orElse(false));
         auctionModel.setEnded(result.map(AuctionModel::isEnded).orElse(false));
-        auctionModel.setBiddingNumber(result.map(AuctionModel::getBiddingNumber).orElse(0));
-        auctionModel.setUsersNumber(result.map(AuctionModel::getUsersNumber).orElse(0));
+        auctionModel.setEndPrice(result.map(AuctionModel::getEndPrice).orElse(0.0));
 
         if(auctionModel.getId() == 0)
             return new ResponseEntity<>(auctionModel, new HttpHeaders(), HttpStatus.valueOf(301));

@@ -49,10 +49,6 @@ public class SaleController {
         boolean isSold = (boolean)map.get("isSold");
         boolean isEnded = (boolean)map.get("isEnded");
 
-        out.println(isSold);
-        out.println(isEnded);
-        out.println(userId);
-
         List<AuctionModel> aMList = auctionRepository.findAllByUserIdAndIsSoldAndIsEnded(userId, isSold,isEnded);
 
         AuctionModel[] result = new AuctionModel[aMList.size()];
