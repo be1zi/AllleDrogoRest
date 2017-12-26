@@ -8,12 +8,14 @@ import Rest.Model.UserModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static java.lang.System.out;
 
 
 @RestController
@@ -40,9 +42,18 @@ public class SaleController {
     }
 
     @RequestMapping(value = "/getMyAuction", method = RequestMethod.POST)
-    public ResponseEntity<AuctionModel[]> getMyAuction(@RequestBody UserModel userModel){
+    public ResponseEntity<AuctionModel[]> getMyAuction(@RequestBody Map<Object,Object> map){
 
-        List<AuctionModel> aMList = auctionRepository.findAllByUserId(userModel.getId());
+        Integer userIdInteger = (Integer) map.get("userId");
+        Long userId = userIdInteger.longValue();
+        boolean isSold = (boolean)map.get("isSold");
+        boolean isEnded = (boolean)map.get("isEnded");
+
+        out.println(isSold);
+        out.println(isEnded);
+        out.println(userId);
+
+        List<AuctionModel> aMList = auctionRepository.findAllByUserIdAndIsSoldAndIsEnded(userId, isSold,isEnded);
 
         AuctionModel[] result = new AuctionModel[aMList.size()];
 

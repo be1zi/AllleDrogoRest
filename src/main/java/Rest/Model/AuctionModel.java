@@ -15,6 +15,7 @@ public class AuctionModel {
 
     @OneToMany
     private List<BiddingModel> biddingList;
+    private int biddingNumber;
 
     private Double buyNowPrice;
     private Double biddingPrice;
@@ -39,10 +40,13 @@ public class AuctionModel {
 
     @OneToMany
     private List<UserModel> usersList;
+    private int usersNumber;
 
     @Transient
     private String tmpDate;
 
+    private boolean isSold;
+    private boolean isEnded;
 
     public Long getId() {
         return id;
@@ -220,12 +224,45 @@ public class AuctionModel {
         this.tmpDate = tmpDate;
     }
 
+    public boolean isSold() {
+        return isSold;
+    }
+
+    public void setSold(boolean sold) {
+        isSold = sold;
+    }
+
+    public int getBiddingNumber() {
+        return biddingNumber;
+    }
+
+    public void setBiddingNumber(int biddingNumber) {
+        this.biddingNumber = biddingNumber;
+    }
+
+    public int getUsersNumber() {
+        return usersNumber;
+    }
+
+    public void setUsersNumber(int usersNumber) {
+        this.usersNumber = usersNumber;
+    }
+
+    public boolean isEnded() {
+        return isEnded;
+    }
+
+    public void setEnded(boolean ended) {
+        isEnded = ended;
+    }
+
     @Override
     public String toString() {
         return "AuctionModel{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", biddingList=" + biddingList +
+                ", biddingNumber=" + biddingNumber +
                 ", buyNowPrice=" + buyNowPrice +
                 ", biddingPrice=" + biddingPrice +
                 ", itemNumber=" + itemNumber +
@@ -244,7 +281,10 @@ public class AuctionModel {
                 ", warranty='" + warranty + '\'' +
                 ", files=" + files +
                 ", usersList=" + usersList +
+                ", usersNumber=" + usersNumber +
                 ", tmpDate='" + tmpDate + '\'' +
+                ", isSold=" + isSold +
+                ", isEnded=" + isEnded +
                 '}';
     }
 }

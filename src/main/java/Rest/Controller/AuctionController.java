@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Calendar;
 import java.util.Optional;
 
 @RestController
@@ -53,6 +52,10 @@ public class AuctionController {
         auctionModel.setWarranty(result.map(AuctionModel::getWarranty).orElse(""));
         auctionModel.setFiles(result.map(AuctionModel::getFiles).orElse(null));
         auctionModel.setUsersList(result.map(AuctionModel::getUsersList).orElse(null));
+        auctionModel.setSold(result.map(AuctionModel::isSold).orElse(false));
+        auctionModel.setEnded(result.map(AuctionModel::isEnded).orElse(false));
+        auctionModel.setBiddingNumber(result.map(AuctionModel::getBiddingNumber).orElse(0));
+        auctionModel.setUsersNumber(result.map(AuctionModel::getUsersNumber).orElse(0));
 
         if(auctionModel.getId() == 0)
             return new ResponseEntity<>(auctionModel, new HttpHeaders(), HttpStatus.valueOf(301));
