@@ -4,19 +4,13 @@ import Rest.DAO.AuctionRepository;
 import Rest.DAO.PhotoRepository;
 import Rest.Model.AuctionModel;
 import Rest.Model.PhotoModel;
-import Rest.Model.UserModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import static java.lang.System.out;
-
 
 @RestController
 @RequestMapping("/sale")
