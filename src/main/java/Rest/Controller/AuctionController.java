@@ -6,11 +6,9 @@ import Rest.Model.AuctionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -62,4 +60,25 @@ public class AuctionController {
             return new ResponseEntity<>(auctionModel, new HttpHeaders(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/edit",method = RequestMethod.POST)
+    public ResponseEntity<AuctionModel> editAuction(@RequestBody Map<Object,Object> map){
+
+        Integer intId = (Integer)map.get("id");
+        Long id = intId.longValue();
+        Integer intUserId = (Integer)map.get("userId");
+        Long userId = intUserId.longValue();
+        Integer viewNumber = (Integer)map.get("viewNumber");
+
+        AuctionModel aM = auctionRepository.findByIdAndUserId(id, userId);
+
+        if(aM == null){
+            return  new ResponseEntity<>(new AuctionModel(), new HttpHeaders(),HttpStatus.FOUND);
+        }
+
+        aM.setViewNumber(viewNumber);
+        auctionRepository.save(aM);
+
+        return new ResponseEntity<>(aM, new HttpHeaders(), HttpStatus.OK);
+
+    }
 }

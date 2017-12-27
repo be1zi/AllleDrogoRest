@@ -8,4 +8,5 @@ import java.util.List;
 public interface AuctionRepository extends CrudRepository<AuctionModel, Long> {
     List<AuctionModel> findAllByUserId(Long id);
     List<AuctionModel> findAllByUserIdAndIsSoldAndIsEnded(Long id, boolean isSold, boolean isEnded);
+    AuctionModel findByIdAndUserId(Long id, Long userId);
 }
