@@ -21,6 +21,8 @@ public class TransactionModel {
     private boolean isBuy;
     private boolean isPay;
     private boolean isCommentSet;
+    private int itemNumber;
+    private double price;
 
     public Long getId() {
         return id;
@@ -60,5 +62,29 @@ public class TransactionModel {
 
     public void setCommentSet(boolean commentSet) {
         isCommentSet = commentSet;
+    }
+
+    public UserModel getUserModel() {
+        return userModel;
+    }
+
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
+    }
+
+    public int getItemNumber() {
+        return itemNumber;
+    }
+
+    public void setItemNumber(int itemNumber) {
+        this.itemNumber = itemNumber;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
