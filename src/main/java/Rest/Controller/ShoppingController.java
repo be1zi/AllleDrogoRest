@@ -1,9 +1,11 @@
 package Rest.Controller;
 
 import Rest.DAO.AuctionRepository;
+import Rest.DAO.BiddingRepository;
 import Rest.DAO.TransactionRepository;
 import Rest.DAO.UserRepository;
 import Rest.Model.AuctionModel;
+import Rest.Model.BiddingModel;
 import Rest.Model.TransactionModel;
 import Rest.Model.UserModel;
 import org.springframework.http.HttpHeaders;
@@ -21,12 +23,14 @@ public class ShoppingController {
 
     private final AuctionRepository auctionRepository;
     private final TransactionRepository transactionRepository;
-    private  final UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BiddingRepository biddingRepository;
 
-    public ShoppingController(AuctionRepository auctionRepository, TransactionRepository transactionRepository, UserRepository userRepository){
+    public ShoppingController(AuctionRepository auctionRepository, TransactionRepository transactionRepository, UserRepository userRepository, BiddingRepository biddingRepository){
         this.auctionRepository = auctionRepository;
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.biddingRepository = biddingRepository;
     }
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
@@ -40,6 +44,8 @@ public class ShoppingController {
         Long userId = uId.longValue();
         Integer iN = (Integer)map.get("itemNumber");
         int itemNumber = iN.intValue();
+        Double pr = (Double)map.get("price");
+        double price = pr.doubleValue();
 
         AuctionModel auctionModel = auctionRepository.findByIdAndUserId(auctionId,ownerId);
 
@@ -74,33 +80,67 @@ public class ShoppingController {
         if(ownerModel.getId() == userModel.getId())
             return new ResponseEntity<>(2, new HttpHeaders(), HttpStatus.OK);
 
-        TransactionModel transactionModel = new TransactionModel();
-        transactionModel.setAuctionModel(auctionModel);
-        transactionModel.setBuy(true);
-        transactionModel.setPay(false);
-        transactionModel.setCommentSet(false);
-        transactionModel.setUserModel(userModel);
-        transactionModel.setItemNumber(itemNumber);
-        transactionModel.setPrice(auctionModel.getBuyNowPrice());
+        //kup teraz
+        if(price < 1) {
+            TransactionModel transactionModel = new TransactionModel();
+            transactionModel.setAuctionModel(auctionModel);
+            transactionModel.setBuy(true);
+            transactionModel.setPay(false);
+            transactionModel.setCommentSet(false);
+            transactionModel.setUserModel(userModel);
+            transactionModel.setItemNumber(itemNumber);
+            transactionModel.setPrice(auctionModel.getBuyNowPrice());
+            transactionModel.setDate(Calendar.getInstance());
 
-        ownerModel.getAccountModel().getTransactionList().add(transactionModel);
+            ownerModel.getAccountModel().getTransactionList().add(transactionModel);
 
-        int items = auctionModel.getItemNumber() - itemNumber;
+            int items = auctionModel.getItemNumber() - itemNumber;
 
-        if(itemNumber<0)
-            return new ResponseEntity<>(0, new HttpHeaders(), HttpStatus.OK);
+            if (itemNumber < 0)
+                return new ResponseEntity<>(0, new HttpHeaders(), HttpStatus.OK);
 
-        auctionModel.setItemNumber(items);
+            auctionModel.setItemNumber(items);
 
-        if(items == 0) {
-            auctionModel.setEnded(true);
-            auctionModel.setEndPrice(auctionModel.getBuyNowPrice());
-            auctionModel.setEndDate(Calendar.getInstance());
+            if (items == 0) {
+                auctionModel.setEnded(true);
+                auctionModel.setSold(true);
+                auctionModel.setEndPrice(auctionModel.getBuyNowPrice());
+                auctionModel.setEndDate(Calendar.getInstance());
+            }
+
+            transactionRepository.save(transactionModel);
+            auctionRepository.save(auctionModel);
+            userRepository.save(ownerModel);
+
+        }else{ //licytacja
+
+            BiddingModel biddingModel = biddingRepository.findByUserId(userModel);
+
+            if(biddingModel == null) {
+                biddingModel = new BiddingModel();
+                biddingModel.setDate(Calendar.getInstance());
+                biddingModel.setItemNumber(itemNumber);
+                biddingModel.setPrice(price);
+                biddingModel.setUserId(userModel);
+                biddingModel.setUserLogin(userModel.getLogin());
+                auctionModel.getBiddingList().add(biddingModel);
+            }else{
+                biddingModel.setItemNumber(itemNumber);
+                biddingModel.setPrice(price);
+            }
+
+            auctionModel.setBiddingPrice(price);
+
+            biddingRepository.save(biddingModel);
+            auctionRepository.save(auctionModel);
+            userRepository.save(ownerModel);
         }
 
-        transactionRepository.save(transactionModel);
-        auctionRepository.save(auctionModel);
-        userRepository.save(ownerModel);
+        return new ResponseEntity<>(1, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/bidding", method = RequestMethod.POST)
+    public ResponseEntity<Integer> bidding(@RequestBody Map<Object, Object> map){
 
         return new ResponseEntity<>(1, new HttpHeaders(), HttpStatus.OK);
     }

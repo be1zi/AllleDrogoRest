@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import java.util.Calendar;
 
 @Entity
 public class TransactionModel {
@@ -23,6 +24,7 @@ public class TransactionModel {
     private boolean isCommentSet;
     private int itemNumber;
     private double price;
+    private Calendar date;
 
     public Long getId() {
         return id;
@@ -86,5 +88,13 @@ public class TransactionModel {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 }

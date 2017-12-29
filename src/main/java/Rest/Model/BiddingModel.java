@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.sql.Date;
+import java.util.Calendar;
 
 @Entity
 public class BiddingModel {
@@ -14,11 +15,12 @@ public class BiddingModel {
     private Long id;
 
     @OneToOne
-    private UserModel userModel;
+    private UserModel userId;
+    private String userLogin;
 
     private Double price;
     private int itemNumber;
-    private Date date;
+    private Calendar date;
 
     public Long getId() {
         return id;
@@ -28,12 +30,12 @@ public class BiddingModel {
         this.id = id;
     }
 
-    public UserModel getUserModel() {
-        return userModel;
+    public UserModel getUserId() {
+        return userId;
     }
 
-    public void setUserModel(UserModel userModel) {
-        this.userModel = userModel;
+    public void setUserId(UserModel userId) {
+        this.userId = userId;
     }
 
     public Double getPrice() {
@@ -52,11 +54,19 @@ public class BiddingModel {
         this.itemNumber = itemNumber;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
+    }
+
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 }
