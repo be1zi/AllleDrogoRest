@@ -13,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/shopping")
@@ -91,6 +89,7 @@ public class ShoppingController {
             transactionModel.setItemNumber(itemNumber);
             transactionModel.setPrice(auctionModel.getBuyNowPrice());
             transactionModel.setDate(Calendar.getInstance());
+            transactionModel.setUserLogin(userModel.getLogin());
 
             ownerModel.getAccountModel().getTransactionList().add(transactionModel);
 
@@ -114,7 +113,7 @@ public class ShoppingController {
 
         }else{ //licytacja
 
-            BiddingModel biddingModel = biddingRepository.findByUserId(userModel);
+            BiddingModel biddingModel = biddingRepository.findByUserIdAndAuctionId(userModel, auctionId);
 
             if(biddingModel == null) {
                 biddingModel = new BiddingModel();
@@ -124,12 +123,13 @@ public class ShoppingController {
                 biddingModel.setUserId(userModel);
                 biddingModel.setUserLogin(userModel.getLogin());
                 auctionModel.getBiddingList().add(biddingModel);
+                biddingModel.setAuctionId(auctionId);
             }else{
                 biddingModel.setItemNumber(itemNumber);
                 biddingModel.setPrice(price);
             }
 
-            auctionModel.setBiddingPrice(price);
+            auctionModel.setBiddingPrice(price + 1);
 
             biddingRepository.save(biddingModel);
             auctionRepository.save(auctionModel);
@@ -139,10 +139,28 @@ public class ShoppingController {
         return new ResponseEntity<>(1, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/bidding", method = RequestMethod.POST)
-    public ResponseEntity<Integer> bidding(@RequestBody Map<Object, Object> map){
+//    @RequestMapping(value = "/bidding", method = RequestMethod.POST)
+//    public ResponseEntity<Integer> bidding(@RequestBody Map<Object, Object> map){
+//
+//        return new ResponseEntity<>(1, new HttpHeaders(), HttpStatus.OK);
+//    }
 
-        return new ResponseEntity<>(1, new HttpHeaders(), HttpStatus.OK);
+    @RequestMapping(value = "/transactions", method = RequestMethod.POST)
+    public ResponseEntity<TransactionModel[]> transactions(@RequestBody AuctionModel auctionModel){
+
+        List<TransactionModel> transactionModelArrayList = transactionRepository.findByAuctionModel(auctionModel);
+
+        if(transactionModelArrayList == null)
+            return new ResponseEntity<>(new TransactionModel[0], new HttpHeaders(), HttpStatus.OK);
+
+        TransactionModel[] transactionArray = new TransactionModel[transactionModelArrayList.size()];
+
+        for (int i=0;i<transactionModelArrayList.size(); i++) {
+            transactionArray[i] = transactionModelArrayList.get(i);
+        }
+
+        return new ResponseEntity<>(transactionArray, new HttpHeaders(), HttpStatus.OK);
+
     }
 
 }

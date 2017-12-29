@@ -1,9 +1,6 @@
 package Rest.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Calendar;
 
@@ -16,11 +13,17 @@ public class BiddingModel {
 
     @OneToOne
     private UserModel userId;
+
+    private Long auctionId;
     private String userLogin;
 
     private Double price;
     private int itemNumber;
     private Calendar date;
+
+    @Transient
+    private String tmpDate;
+
 
     public Long getId() {
         return id;
@@ -68,5 +71,21 @@ public class BiddingModel {
 
     public void setUserLogin(String userLogin) {
         this.userLogin = userLogin;
+    }
+
+    public String getTmpDate() {
+        return tmpDate;
+    }
+
+    public void setTmpDate(String tmpDate) {
+        this.tmpDate = tmpDate;
+    }
+
+    public Long getAuctionId() {
+        return auctionId;
+    }
+
+    public void setAuctionId(Long auctionId) {
+        this.auctionId = auctionId;
     }
 }
