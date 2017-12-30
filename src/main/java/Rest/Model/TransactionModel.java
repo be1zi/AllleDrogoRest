@@ -13,6 +13,7 @@ public class TransactionModel {
     @OneToOne
     private UserModel userModel;
     private String userLogin;
+    private String ownerLogin;
 
     @OneToOne
     private AuctionModel auctionModel;
@@ -113,5 +114,13 @@ public class TransactionModel {
 
     public void setTmpDate(String tmpDate) {
         this.tmpDate = tmpDate;
+    }
+
+    public String getOwnerLogin() {
+        return ownerLogin;
+    }
+
+    public void setOwnerLogin(String ownerLogin) {
+        this.ownerLogin = ownerLogin;
     }
 }

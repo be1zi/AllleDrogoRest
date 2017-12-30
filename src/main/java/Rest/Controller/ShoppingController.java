@@ -90,6 +90,7 @@ public class ShoppingController {
             transactionModel.setPrice(auctionModel.getBuyNowPrice());
             transactionModel.setDate(Calendar.getInstance());
             transactionModel.setUserLogin(userModel.getLogin());
+            transactionModel.setOwnerLogin(ownerModel.getLogin());
 
             ownerModel.getAccountModel().getTransactionList().add(transactionModel);
 
@@ -157,4 +158,19 @@ public class ShoppingController {
 
     }
 
+    @RequestMapping(value = "/bought", method = RequestMethod.POST)
+    public ResponseEntity<TransactionModel[]> getBought(@RequestBody String login){
+
+        List<TransactionModel> transactionModelList = transactionRepository.findByUserLogin(login);
+
+        if(transactionModelList == null && transactionModelList.size() == 0)
+            return new ResponseEntity<>(new TransactionModel[0], new HttpHeaders(), HttpStatus.OK);
+
+        TransactionModel[] transactionModels = new TransactionModel[transactionModelList.size()];
+
+        for(int i=0; i<transactionModelList.size(); i++)
+            transactionModels[i] = transactionModelList.get(i);
+
+        return new ResponseEntity<>(transactionModels, new HttpHeaders(), HttpStatus.OK);
+    }
 }

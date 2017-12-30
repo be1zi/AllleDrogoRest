@@ -9,4 +9,5 @@ import java.util.List;
 public interface TransactionRepository extends CrudRepository<TransactionModel, Long> {
 
     List<TransactionModel> findByAuctionModel(AuctionModel auctionModel);
+    List<TransactionModel> findByUserLogin(String userLogin);
 }
