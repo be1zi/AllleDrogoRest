@@ -18,8 +18,8 @@ public class TransactionModel {
     private AuctionModel auctionModel;
 
     private boolean isBuy;
-    private boolean isPay;
-    private boolean isCommentSet;
+    private boolean pay;
+    private boolean commentSet;
     private int itemNumber;
     private double price;
     private Calendar date;
@@ -52,19 +52,19 @@ public class TransactionModel {
     }
 
     public boolean isPay() {
-        return isPay;
+        return pay;
     }
 
     public void setPay(boolean pay) {
-        isPay = pay;
+        this.pay = pay;
     }
 
     public boolean isCommentSet() {
-        return isCommentSet;
+        return commentSet;
     }
 
     public void setCommentSet(boolean commentSet) {
-        isCommentSet = commentSet;
+        this.commentSet = commentSet;
     }
 
     public UserModel getUserModel() {

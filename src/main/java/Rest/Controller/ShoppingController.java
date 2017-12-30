@@ -139,12 +139,6 @@ public class ShoppingController {
         return new ResponseEntity<>(1, new HttpHeaders(), HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/bidding", method = RequestMethod.POST)
-//    public ResponseEntity<Integer> bidding(@RequestBody Map<Object, Object> map){
-//
-//        return new ResponseEntity<>(1, new HttpHeaders(), HttpStatus.OK);
-//    }
-
     @RequestMapping(value = "/transactions", method = RequestMethod.POST)
     public ResponseEntity<TransactionModel[]> transactions(@RequestBody AuctionModel auctionModel){
 
