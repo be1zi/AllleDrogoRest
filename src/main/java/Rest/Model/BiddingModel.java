@@ -15,7 +15,9 @@ public class BiddingModel {
     private UserModel userId;
 
     private Long auctionId;
+    private String auctionTitle;
     private String userLogin;
+    private String ownerLogin;
 
     private Double price;
     private int itemNumber;
@@ -87,5 +89,21 @@ public class BiddingModel {
 
     public void setAuctionId(Long auctionId) {
         this.auctionId = auctionId;
+    }
+
+    public String getOwnerLogin() {
+        return ownerLogin;
+    }
+
+    public void setOwnerLogin(String ownerLogin) {
+        this.ownerLogin = ownerLogin;
+    }
+
+    public String getAuctionTitle() {
+        return auctionTitle;
+    }
+
+    public void setAuctionTitle(String auctionTitle) {
+        this.auctionTitle = auctionTitle;
     }
 }

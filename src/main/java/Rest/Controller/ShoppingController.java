@@ -125,6 +125,7 @@ public class ShoppingController {
                 biddingModel.setUserLogin(userModel.getLogin());
                 auctionModel.getBiddingList().add(biddingModel);
                 biddingModel.setAuctionId(auctionId);
+                biddingModel.setAuctionTitle(auctionModel.getTitle());
             }else{
                 biddingModel.setItemNumber(itemNumber);
                 biddingModel.setPrice(price);
@@ -172,5 +173,21 @@ public class ShoppingController {
             transactionModels[i] = transactionModelList.get(i);
 
         return new ResponseEntity<>(transactionModels, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/auctioned", method = RequestMethod.POST)
+    public ResponseEntity<BiddingModel[]> getAuctionedAuctions(@RequestBody String login){
+
+        List<BiddingModel> biddingModels = biddingRepository.findAllByUserLogin(login);
+
+        if(biddingModels == null && biddingModels.size() == 0)
+            return new ResponseEntity<>(new BiddingModel[0], new HttpHeaders(), HttpStatus.OK);
+
+        BiddingModel[] biddingArrays = new BiddingModel[biddingModels.size()];
+
+        for( int i=0; i<biddingModels.size();i++)
+            biddingArrays[i] = biddingModels.get(i);
+
+        return new ResponseEntity<>(biddingArrays, new HttpHeaders(), HttpStatus.OK);
     }
 }
