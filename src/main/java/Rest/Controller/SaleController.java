@@ -4,6 +4,7 @@ import Rest.DAO.AuctionRepository;
 import Rest.DAO.PhotoRepository;
 import Rest.DAO.TransactionRepository;
 import Rest.DAO.UserRepository;
+import Rest.Helpers.TypeFormatter;
 import Rest.Model.AuctionModel;
 import Rest.Model.PhotoModel;
 import Rest.Model.TransactionModel;
@@ -52,11 +53,7 @@ public class SaleController {
 
         List<AuctionModel> aMList = auctionRepository.findAllByUserIdAndIsSoldAndIsEnded(userId, isSold,isEnded);
 
-        AuctionModel[] result = new AuctionModel[aMList.size()];
-
-        for(int i = 0; i<aMList.size(); i++){
-            result[i] = aMList.get(i);
-        }
+        AuctionModel[] result = TypeFormatter.listToArray(aMList);
 
         if(aMList == null)
             return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.valueOf(301));

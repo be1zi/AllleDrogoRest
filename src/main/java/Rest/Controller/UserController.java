@@ -3,12 +3,17 @@ package Rest.Controller;
 import Rest.DAO.AccountRepository;
 import Rest.DAO.UserRepository;
 import Rest.Model.AccountModel;
+import Rest.Model.AuctionModel;
+import Rest.Model.TransactionModel;
 import Rest.Model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.out;
 
@@ -39,6 +44,10 @@ public class UserController {
                 return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.FOUND);
             }
         } else {
+            List<AuctionModel> tmp = new ArrayList<>();
+            uM.getAccountModel().setUserAuctionList(tmp);
+            List<TransactionModel> tmpT = new ArrayList<>();
+            uM.getAccountModel().setTransactionList(tmpT);
             return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
         }
     }
