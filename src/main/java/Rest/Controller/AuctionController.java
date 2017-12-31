@@ -3,11 +3,14 @@ package Rest.Controller;
 import Rest.DAO.AuctionRepository;
 import Rest.DAO.PhotoRepository;
 import Rest.Model.AuctionModel;
+import Rest.Model.PhotoModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -79,6 +82,29 @@ public class AuctionController {
         auctionRepository.save(aM);
 
         return new ResponseEntity<>(aM, new HttpHeaders(), HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/searchByCategory", method = RequestMethod.POST)
+    public ResponseEntity<AuctionModel[]> searchByCategory(@RequestBody String category){
+
+        List<AuctionModel> auctionModels = auctionRepository.findAllByCategory(category);
+
+        if(auctionModels == null || auctionModels.size() == 0)
+            return new ResponseEntity<>(new AuctionModel[0], new HttpHeaders(), HttpStatus.OK);
+
+        AuctionModel[] auctionArray = new AuctionModel[auctionModels.size()];
+        for (int i=0;i<auctionModels.size();i++){
+            if(auctionModels.get(i).getFiles() != null || auctionModels.get(i).getFiles().size() != 0) {
+                PhotoModel tmp = auctionModels.get(i).getFiles().get(0);
+                List<PhotoModel> tmpArray = new ArrayList<>();
+                tmpArray.add(tmp);
+                auctionModels.get(i).setFiles(tmpArray);
+            }
+            auctionArray[i] = auctionModels.get(i);
+        }
+
+        return new ResponseEntity<>(auctionArray, new HttpHeaders(), HttpStatus.OK);
 
     }
 }
