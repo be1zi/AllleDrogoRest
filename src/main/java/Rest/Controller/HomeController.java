@@ -35,15 +35,24 @@ public class HomeController {
         AuctionModel[] auctionArray = new AuctionModel[auctionModels.size()];
 
         for(int i =0; i<auctionModels.size(); i++){
-            auctionArray[i] = auctionModels.get(i);
-            ArrayList<PhotoModel> image = new ArrayList<>();
-            try {
-                image.add(auctionArray[i].getFiles().get(0));
-                auctionArray[i].setFiles(image);
-            }catch (Exception e){
-                image.add(new PhotoModel());
-                auctionArray[i].setFiles(image);
+
+            if(auctionModels.get(i).getFiles() != null || auctionModels.get(i).getFiles().size() != 0){
+                try {
+                    PhotoModel tmp = auctionModels.get(i).getFiles().get(0);
+                    List<PhotoModel> tmpArray = new ArrayList<>();
+                    tmpArray.add(tmp);
+                    auctionModels.get(i).setFiles(tmpArray);
+                }catch (Exception e){
+                    List<PhotoModel> tmpArray = new ArrayList<>();
+                    tmpArray.add(new PhotoModel());
+                    auctionModels.get(i).setFiles(tmpArray);
+                }
+            }else{
+                List<PhotoModel> tmpArray = new ArrayList<>();
+                tmpArray.add(new PhotoModel());
+                auctionModels.get(i).setFiles(tmpArray);
             }
+            auctionArray[i] = auctionModels.get(i);
         }
 
         if(auctionModels == null)
