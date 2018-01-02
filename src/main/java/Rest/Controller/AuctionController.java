@@ -3,6 +3,7 @@ package Rest.Controller;
 import Rest.DAO.AuctionRepository;
 import Rest.DAO.PhotoRepository;
 import Rest.Model.AuctionModel;
+import Rest.Model.BiddingModel;
 import Rest.Model.PhotoModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -128,5 +129,32 @@ public class AuctionController {
 
         return new ResponseEntity<>(true, new HttpHeaders(), HttpStatus.OK);
 
+    }
+
+    @RequestMapping(value = "/addagain", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> addAgain(@RequestBody Map<Object,Object> map){
+
+        Integer intId = (Integer)map.get("id");
+        Long id = intId.longValue();
+        Integer intUserId = (Integer)map.get("userId");
+        Long userId = intUserId.longValue();
+
+        AuctionModel auctionModel = auctionRepository.findByIdAndUserId(id, userId);
+
+        if(auctionModel == null)
+            return new ResponseEntity<>(false, new HttpHeaders(), HttpStatus.OK);
+
+        List<BiddingModel> biddingModels = new ArrayList<>();
+        auctionModel.setBiddingList(biddingModels);
+        auctionModel.setStartDate(Calendar.getInstance());
+        Calendar tmpCal = Calendar.getInstance();
+        tmpCal.add(Calendar.DATE, 7);
+        auctionModel.setEndDate(tmpCal);
+        auctionModel.setEnded(false);
+        auctionModel.setViewNumber(0);
+
+        auctionRepository.save(auctionModel);
+
+        return new ResponseEntity<>(true, new HttpHeaders(), HttpStatus.OK);
     }
 }
