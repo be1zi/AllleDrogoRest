@@ -2,7 +2,6 @@ package Rest.Controller;
 
 import Rest.DAO.AuctionRepository;
 import Rest.DAO.PhotoRepository;
-import Rest.DAO.TransactionRepository;
 import Rest.DAO.UserRepository;
 import Rest.Helpers.TypeFormatter;
 import Rest.Model.AuctionModel;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

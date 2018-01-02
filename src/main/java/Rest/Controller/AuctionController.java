@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/auction")
@@ -56,6 +53,7 @@ public class AuctionController {
         auctionModel.setSold(result.map(AuctionModel::isSold).orElse(false));
         auctionModel.setEnded(result.map(AuctionModel::isEnded).orElse(false));
         auctionModel.setEndPrice(result.map(AuctionModel::getEndPrice).orElse(0.0));
+        auctionModel.setUserLogin(result.map(AuctionModel::getUserLogin).orElse(null));
 
         if(auctionModel.getId() == 0)
             return new ResponseEntity<>(auctionModel, new HttpHeaders(), HttpStatus.valueOf(301));
@@ -105,6 +103,30 @@ public class AuctionController {
         }
 
         return new ResponseEntity<>(auctionArray, new HttpHeaders(), HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> deleteAuction(@RequestBody Map<Object,Object> map){
+
+        Integer intId = (Integer)map.get("id");
+        Long id = intId.longValue();
+        Integer intUserId = (Integer)map.get("userId");
+        Long userId = intUserId.longValue();
+
+        AuctionModel auctionModel = auctionRepository.findByIdAndUserId(id, userId);
+
+        if(auctionModel == null)
+            return new ResponseEntity<>(false, new HttpHeaders(), HttpStatus.OK);
+
+        auctionModel.getBiddingList().clear();   //???????
+        auctionModel.setBiddingList(null);
+        auctionModel.setEnded(true);
+        auctionModel.setEndDate(Calendar.getInstance());
+
+        auctionRepository.save(auctionModel);
+
+        return new ResponseEntity<>(true, new HttpHeaders(), HttpStatus.OK);
 
     }
 }

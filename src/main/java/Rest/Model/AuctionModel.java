@@ -12,6 +12,7 @@ public class AuctionModel {
     @GeneratedValue
     private Long id;
     private Long userId;
+    private String userLogin;
 
     @OneToMany
     private List<BiddingModel> biddingList;
@@ -258,11 +259,20 @@ public class AuctionModel {
         this.mainImage = mainImage;
     }
 
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
+    }
+
     @Override
     public String toString() {
         return "AuctionModel{" +
                 "id=" + id +
                 ", userId=" + userId +
+                ", userLogin='" + userLogin + '\'' +
                 ", biddingList=" + biddingList +
                 ", buyNowPrice=" + buyNowPrice +
                 ", biddingPrice=" + biddingPrice +
@@ -283,6 +293,7 @@ public class AuctionModel {
                 ", files=" + files +
                 ", usersList=" + usersList +
                 ", tmpDate='" + tmpDate + '\'' +
+                ", mainImage='" + mainImage + '\'' +
                 ", isSold=" + isSold +
                 ", isEnded=" + isEnded +
                 ", endPrice=" + endPrice +
