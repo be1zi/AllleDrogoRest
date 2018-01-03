@@ -1,11 +1,14 @@
 package Rest.Controller;
 
+import Rest.DAO.AccountRepository;
 import Rest.DAO.AuctionRepository;
 import Rest.DAO.PhotoRepository;
+import Rest.DAO.UserRepository;
 import Rest.Helpers.TypeFormatter;
 import Rest.Model.AuctionModel;
 import Rest.Model.BiddingModel;
 import Rest.Model.PhotoModel;
+import Rest.Model.UserModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +21,14 @@ import java.util.*;
 public class AuctionController {
 
     private final AuctionRepository auctionRepository;
-    private final PhotoRepository photoRepository;
+    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
-    public AuctionController(AuctionRepository auctionRepository, PhotoRepository photoRepository){
+    public AuctionController(AuctionRepository auctionRepository, AccountRepository accountRepository, UserRepository userRepository){
 
         this.auctionRepository = auctionRepository;
-        this.photoRepository = photoRepository;
+        this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.POST)
@@ -93,19 +98,6 @@ public class AuctionController {
         if(auctionModels == null || auctionModels.size() == 0)
             return new ResponseEntity<>(new AuctionModel[0], new HttpHeaders(), HttpStatus.OK);
 
-//        AuctionModel[] auctionArray = new AuctionModel[auctionModels.size()];
-//        for (int i=0;i<auctionModels.size();i++){
-//            if(auctionModels.get(i).getFiles() != null && auctionModels.get(i).getFiles().size() != 0) {
-//                PhotoModel tmp = auctionModels.get(i).getFiles().get(0);
-//                List<PhotoModel> tmpArray = new ArrayList<>();
-//                tmpArray.add(tmp);
-//                auctionModels.get(i).setFiles(tmpArray);
-//            }else {
-//                auctionModels.get(i).setFiles(new ArrayList<>());
-//            }
-//            auctionArray[i] = auctionModels.get(i);
-//        }
-
         AuctionModel[] auctionArray = TypeFormatter.listToArray(auctionModels);
 
         return new ResponseEntity<>(auctionArray, new HttpHeaders(), HttpStatus.OK);
@@ -161,5 +153,51 @@ public class AuctionController {
         auctionRepository.save(auctionModel);
 
         return new ResponseEntity<>(true, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/addToObserved", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> addToObserved(@RequestBody Map<String, Long> map){
+
+        Long id = map.get("id");
+        Long userId = map.get("userId");
+        Long ownerId = map.get("ownerId");
+
+        AuctionModel auctionModel = auctionRepository.findByIdAndUserId(id, ownerId);
+
+        if(auctionModel == null)
+            return new ResponseEntity<>(false, new HttpHeaders(), HttpStatus.OK);
+
+
+        Optional<UserModel> result = userRepository.findById(userId);
+        UserModel userModel = new UserModel();
+        userModel.setId(result.map(UserModel::getId).orElse(Long.valueOf(0)));
+        userModel.setLogin(result.map(UserModel::getLogin).orElse(null));
+        userModel.setPassword(result.map(UserModel::getPassword).orElse(null));
+        userModel.setAccountType(result.map(UserModel::getAccountType).orElse(null));
+        userModel.setAccountModel(result.map(UserModel::getAccountModel).orElse(null));
+
+        if(userModel == null || userModel.getId() == 0){
+            return new ResponseEntity<>(false, new HttpHeaders(), HttpStatus.OK);
+        }
+
+        if(userModel.getId() == auctionModel.getUserId())
+            return new ResponseEntity<>(false, new HttpHeaders(), HttpStatus.OK);
+
+        List<AuctionModel> auctionModels = userModel.getAccountModel().getWatchUserList();
+
+        if(auctionModels == null)
+            auctionModels = new ArrayList<>();
+
+        if(auctionModels.contains(auctionModel))
+            return new ResponseEntity<>(false, new HttpHeaders(), HttpStatus.OK);
+
+        auctionModels.add(auctionModel);
+        userModel.getAccountModel().setWatchUserList(auctionModels);
+
+        accountRepository.save(userModel.getAccountModel());
+        userRepository.save(userModel);
+
+        return new ResponseEntity<>(true, new HttpHeaders(), HttpStatus.OK);
+
     }
 }

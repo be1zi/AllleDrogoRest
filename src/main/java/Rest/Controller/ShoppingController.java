@@ -4,6 +4,7 @@ import Rest.DAO.AuctionRepository;
 import Rest.DAO.BiddingRepository;
 import Rest.DAO.TransactionRepository;
 import Rest.DAO.UserRepository;
+import Rest.Helpers.TypeFormatter;
 import Rest.Model.AuctionModel;
 import Rest.Model.BiddingModel;
 import Rest.Model.TransactionModel;
@@ -189,5 +190,19 @@ public class ShoppingController {
             biddingArrays[i] = biddingModels.get(i);
 
         return new ResponseEntity<>(biddingArrays, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/observed", method = RequestMethod.POST)
+    public ResponseEntity<AuctionModel[]> getObserved(@RequestBody String login){
+
+        List<AuctionModel> auctionModels = userRepository.findByLogin(login).getAccountModel().getWatchUserList();
+
+        if(auctionModels == null)
+            return new ResponseEntity<>(new AuctionModel[0], new HttpHeaders(), HttpStatus.OK);
+
+        AuctionModel[] array = TypeFormatter.listToArray(auctionModels);
+
+        return new ResponseEntity<>(array, new HttpHeaders(), HttpStatus.OK);
+
     }
 }
