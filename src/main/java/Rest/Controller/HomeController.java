@@ -34,27 +34,6 @@ public class HomeController {
         List<AuctionModel> auctionModels = auctionRepository.findFirst9ByIsEndedOrderByViewNumberDesc(false);
 
         AuctionModel[] auctionArray = TypeFormatter.listToArray(auctionModels);
-//
-//        for(int i =0; i<auctionModels.size(); i++){
-//
-//            if(auctionModels.get(i).getFiles() != null || auctionModels.get(i).getFiles().size() != 0){
-//                try {
-//                    PhotoModel tmp = auctionModels.get(i).getFiles().get(0);
-//                    List<PhotoModel> tmpArray = new ArrayList<>();
-//                    tmpArray.add(tmp);
-//                    auctionModels.get(i).setFiles(tmpArray);
-//                }catch (Exception e){
-//                    List<PhotoModel> tmpArray = new ArrayList<>();
-//                    tmpArray.add(new PhotoModel());
-//                    auctionModels.get(i).setFiles(tmpArray);
-//                }
-//            }else{
-//                List<PhotoModel> tmpArray = new ArrayList<>();
-//                tmpArray.add(new PhotoModel());
-//                auctionModels.get(i).setFiles(tmpArray);
-//            }
-//            auctionArray[i] = auctionModels.get(i);
-//        }
 
         if(auctionModels == null)
             return new ResponseEntity<>(auctionArray, new HttpHeaders(), HttpStatus.valueOf(301));

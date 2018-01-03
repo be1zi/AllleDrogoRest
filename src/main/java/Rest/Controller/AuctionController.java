@@ -2,6 +2,7 @@ package Rest.Controller;
 
 import Rest.DAO.AuctionRepository;
 import Rest.DAO.PhotoRepository;
+import Rest.Helpers.TypeFormatter;
 import Rest.Model.AuctionModel;
 import Rest.Model.BiddingModel;
 import Rest.Model.PhotoModel;
@@ -92,16 +93,20 @@ public class AuctionController {
         if(auctionModels == null || auctionModels.size() == 0)
             return new ResponseEntity<>(new AuctionModel[0], new HttpHeaders(), HttpStatus.OK);
 
-        AuctionModel[] auctionArray = new AuctionModel[auctionModels.size()];
-        for (int i=0;i<auctionModels.size();i++){
-            if(auctionModels.get(i).getFiles() != null || auctionModels.get(i).getFiles().size() != 0) {
-                PhotoModel tmp = auctionModels.get(i).getFiles().get(0);
-                List<PhotoModel> tmpArray = new ArrayList<>();
-                tmpArray.add(tmp);
-                auctionModels.get(i).setFiles(tmpArray);
-            }
-            auctionArray[i] = auctionModels.get(i);
-        }
+//        AuctionModel[] auctionArray = new AuctionModel[auctionModels.size()];
+//        for (int i=0;i<auctionModels.size();i++){
+//            if(auctionModels.get(i).getFiles() != null && auctionModels.get(i).getFiles().size() != 0) {
+//                PhotoModel tmp = auctionModels.get(i).getFiles().get(0);
+//                List<PhotoModel> tmpArray = new ArrayList<>();
+//                tmpArray.add(tmp);
+//                auctionModels.get(i).setFiles(tmpArray);
+//            }else {
+//                auctionModels.get(i).setFiles(new ArrayList<>());
+//            }
+//            auctionArray[i] = auctionModels.get(i);
+//        }
+
+        AuctionModel[] auctionArray = TypeFormatter.listToArray(auctionModels);
 
         return new ResponseEntity<>(auctionArray, new HttpHeaders(), HttpStatus.OK);
 
