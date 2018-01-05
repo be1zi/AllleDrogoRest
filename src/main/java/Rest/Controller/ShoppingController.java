@@ -117,6 +117,10 @@ public class ShoppingController {
 
             BiddingModel biddingModel = biddingRepository.findByUserIdAndAuctionId(userModel, auctionId);
 
+//            List<AuctionModel> list = new ArrayList<>();
+//            if(userModel.getAccountModel().getActiveAuctionList() != null)
+//                list = userModel.getAccountModel().getActiveAuctionList();
+
             if(biddingModel == null) {
                 biddingModel = new BiddingModel();
                 biddingModel.setDate(Calendar.getInstance());
@@ -127,6 +131,7 @@ public class ShoppingController {
                 auctionModel.getBiddingList().add(biddingModel);
                 biddingModel.setAuctionId(auctionId);
                 biddingModel.setAuctionTitle(auctionModel.getTitle());
+//                list.add(auctionModel);
             }else{
                 biddingModel.setItemNumber(itemNumber);
                 biddingModel.setPrice(price);
@@ -137,6 +142,7 @@ public class ShoppingController {
             biddingRepository.save(biddingModel);
             auctionRepository.save(auctionModel);
             userRepository.save(ownerModel);
+//            userRepository.save(userModel);
         }
 
         return new ResponseEntity<>(1, new HttpHeaders(), HttpStatus.OK);
@@ -205,4 +211,7 @@ public class ShoppingController {
         return new ResponseEntity<>(array, new HttpHeaders(), HttpStatus.OK);
 
     }
+
+//    @RequestMapping(value = "/notBought", method = RequestMethod.POST)
+//    public ResponseEntity<AuctionModel[]> getNotBought(){}
 }
