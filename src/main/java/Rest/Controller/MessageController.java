@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,8 +36,7 @@ public class MessageController {
 
         if(message == null){
             message = new MessageModel();
-            List<SingleMessageModel> list = new ArrayList<>();
-            message.setSingleMessageModels(list);
+
             messageRepository.save(messageModel);
             message = messageRepository.findByTopicAndOwnerLoginAndSenderLogin(messageModel.getTopic(), messageModel.getOwnerLogin(), messageModel.getSenderLogin());
         }
@@ -65,13 +63,10 @@ public class MessageController {
         if(message == null)
             return new ResponseEntity<>(false, new HttpHeaders(), HttpStatus.OK);
 
-        List<SingleMessageModel> list = message.getSingleMessageModels();
-
-        if(list == null || list.size() == 0)
-            list = new ArrayList<>();
-
         int itemsNumber = message.getItemNumber() + 1;
         message.setItemNumber(itemsNumber);
+        message.getSingleMessageModels().add(singleMessageModel);
+        message.setDate(Calendar.getInstance());
 
         singleMessageRepository.save(singleMessageModel);
         messageRepository.save(message);
@@ -80,12 +75,36 @@ public class MessageController {
 
     }
 
-//    @RequestMapping(value = "/getMessageList", method = RequestMethod.POST)
-//    public ResponseEntity<MessageModel> getMessageList(@RequestBody String userLogin){
-//
-//        List<MessageModel> listOwner = messageRepository.f
-//    }
-//
+    @RequestMapping(value = "/getMessageList", method = RequestMethod.POST)
+    public ResponseEntity<MessageModel[]> getMessageList(@RequestBody String userLogin){
+
+        List<MessageModel> ownerList = messageRepository.findAllByOwnerLogin(userLogin);
+        List<MessageModel> senderList = messageRepository.findAllBySenderLogin(userLogin);
+
+        if((ownerList == null || ownerList.size() == 0) && (senderList == null || senderList.size() == 0))
+            return new ResponseEntity<>( new MessageModel[0], new HttpHeaders(), HttpStatus.OK);
+
+        MessageModel[] result = new MessageModel[ownerList.size() + senderList.size()];
+
+        int iterator = 0;
+        if(ownerList != null && ownerList.size() != 0) {
+            for (int i = 0; i < ownerList.size(); i++){
+                result[i] = ownerList.get(i);
+                iterator++;
+            }
+        }
+
+        if(senderList != null && senderList.size() != 0){
+            for(int i=0;i<senderList.size(); i++ ){
+                result[iterator] = senderList.get(i);
+                iterator++;
+            }
+        }
+
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+
+    }
+
 //    @RequestMapping(value = "/getSingleMessagesList", method = RequestMethod.POST)
 //    public ResponseEntity<MessageModel[]> getSingleMessagesList(@RequestBody Map<String, String> map){
 //

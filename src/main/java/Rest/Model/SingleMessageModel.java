@@ -3,6 +3,7 @@ package Rest.Model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Calendar;
 
 @Entity
@@ -15,6 +16,9 @@ public class SingleMessageModel {
     private String content;
     private Long messageModelId;
     private Calendar date;
+
+    @Transient
+    private String tmpDate;
 
     public Long getId() {
         return id;
@@ -54,5 +58,13 @@ public class SingleMessageModel {
 
     public void setDate(Calendar date) {
         this.date = date;
+    }
+
+    public String getTmpDate() {
+        return tmpDate;
+    }
+
+    public void setTmpDate(String tmpDate) {
+        this.tmpDate = tmpDate;
     }
 }
