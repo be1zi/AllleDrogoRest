@@ -34,10 +34,4 @@ public class AccountController {
 
         return new ResponseEntity<>(list.size(), new HttpHeaders(), HttpStatus.OK);
     }
-
-//    @RequestMapping(value = "/commentsNumber", method = RequestMethod.POST)
-//    public ResponseEntity<Integer> numberOfComments(@RequestBody Comment type){
-//
-//
-//    }
 }

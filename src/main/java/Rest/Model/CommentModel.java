@@ -2,10 +2,7 @@ package Rest.Model;
 
 import Rest.Helpers.Comment;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
@@ -20,6 +17,11 @@ public class CommentModel {
     private Calendar date;
     private Comment type;
     private String auctionTitle;
+
+    @Transient
+    private String tmpDate;
+
+    private Long transactionId;
 
     public Long getId() {
         return id;
@@ -75,5 +77,21 @@ public class CommentModel {
 
     public void setAuctionTitle(String auctionTitle) {
         this.auctionTitle = auctionTitle;
+    }
+
+    public String getTmpDate() {
+        return tmpDate;
+    }
+
+    public void setTmpDate(String tmpDate) {
+        this.tmpDate = tmpDate;
+    }
+
+    public Long getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(Long transactionId) {
+        this.transactionId = transactionId;
     }
 }

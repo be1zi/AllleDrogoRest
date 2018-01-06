@@ -10,4 +10,5 @@ public interface TransactionRepository extends CrudRepository<TransactionModel, 
 
     List<TransactionModel> findByAuctionModel(AuctionModel auctionModel);
     List<TransactionModel> findByUserLogin(String userLogin);
+    TransactionModel findByIdAndUserLogin(Long id, String login);
 }
