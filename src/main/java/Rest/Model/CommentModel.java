@@ -1,9 +1,12 @@
 package Rest.Model;
 
+import Rest.Helpers.Comment;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import java.util.Calendar;
 
 @Entity
 public class CommentModel {
@@ -13,9 +16,10 @@ public class CommentModel {
     private Long id;
     private int rate;
     private String description;
-
-    @OneToOne
-    private UserModel settingUser;
+    private String senderLogin;
+    private Calendar date;
+    private Comment type;
+    private String auctionTitle;
 
     public Long getId() {
         return id;
@@ -41,11 +45,35 @@ public class CommentModel {
         this.description = description;
     }
 
-    public UserModel getSettingUser() {
-        return settingUser;
+    public String getSenderLogin() {
+        return senderLogin;
     }
 
-    public void setSettingUser(UserModel settingUser) {
-        this.settingUser = settingUser;
+    public void setSenderLogin(String senderLogin) {
+        this.senderLogin = senderLogin;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(Calendar date) {
+        this.date = date;
+    }
+
+    public Comment getType() {
+        return type;
+    }
+
+    public void setType(Comment type) {
+        this.type = type;
+    }
+
+    public String getAuctionTitle() {
+        return auctionTitle;
+    }
+
+    public void setAuctionTitle(String auctionTitle) {
+        this.auctionTitle = auctionTitle;
     }
 }
