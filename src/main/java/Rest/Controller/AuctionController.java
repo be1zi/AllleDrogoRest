@@ -200,4 +200,18 @@ public class AuctionController {
         return new ResponseEntity<>(true, new HttpHeaders(), HttpStatus.OK);
 
     }
+
+    @RequestMapping("/search")
+    public ResponseEntity<AuctionModel[]> searchAuctions(@RequestBody String title){
+
+        List<AuctionModel> list = auctionRepository.findAllByTitleContainsAndIsSoldAndIsEnded(title, false, false);
+
+        if(list == null)
+            list = new ArrayList<>();
+
+        AuctionModel[] array = TypeFormatter.listToArray(list);
+
+        return new ResponseEntity<>(array, new HttpHeaders(), HttpStatus.OK);
+
+    }
 }

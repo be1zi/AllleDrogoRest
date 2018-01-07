@@ -11,4 +11,5 @@ public interface AuctionRepository extends CrudRepository<AuctionModel, Long> {
     AuctionModel findByIdAndUserId(Long id, Long userId);
     List<AuctionModel> findFirst9ByIsEndedOrderByViewNumberDesc(boolean isEnded);
     List<AuctionModel> findAllByCategory(String category);
+    List<AuctionModel> findAllByTitleContainsAndIsSoldAndIsEnded(String title, boolean isSold, boolean isEnded);
 }
