@@ -1,5 +1,7 @@
 package Rest.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -39,6 +41,7 @@ public class AccountModel {
     private List<AuctionModel> userAuctionList;
 
     @OneToMany
+    @JsonIgnore
     private List<TransactionModel> transactionList;
 
     public String getDescription() {
@@ -185,10 +188,11 @@ public class AccountModel {
         this.userAuctionList = userAuctionList;
     }
 
+    @JsonIgnore
     public List<TransactionModel> getTransactionList() {
         return transactionList;
     }
-
+    @JsonIgnore
     public void setTransactionList(List<TransactionModel> transactionList) {
         this.transactionList = transactionList;
     }
