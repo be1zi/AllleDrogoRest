@@ -70,5 +70,14 @@ public class UserController {
         return new ResponseEntity<>(uM, new HttpHeaders(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getByLogin")
+    public ResponseEntity<UserModel> getByLogin(@RequestBody String login){
 
+        UserModel user = userRepository.findByLogin(login);
+
+        if(user == null)
+            return new ResponseEntity<>(new UserModel(), new HttpHeaders() , HttpStatus.OK);
+
+        return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.OK);
+    }
 }
