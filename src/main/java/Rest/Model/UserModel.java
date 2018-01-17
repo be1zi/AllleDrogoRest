@@ -1,15 +1,27 @@
 package Rest.Model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class UserModel {
 
     @Id
     @GeneratedValue
+    @NotNull
+    @Column(name = "UserID")
     private Long id;
+
+    @NotNull
+    @Column(name = "Login")
     private String login;
+
+    @NotNull
+    @Column(name = "Password")
     private String password;
+
+    @NotNull
+    @Column(name = "AccountType")
     private String accountType;
 
     @OneToOne
